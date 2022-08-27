@@ -1,9 +1,10 @@
 /// <reference path="../lib/openrct2.d.ts" />
 
 import { randomEnum } from "./utils"
+import { ObjectiveInfo } from "./text";
 
 export enum RandomizerObjectiveType {
-    RollerCoasterTypeWithStat,
+    RollerCoasterTypeWithStat = 0,
     RollerCoasterTypeWithLenth,
     ScenarioStandard,
     ScenarioWithDifferentObjective,
@@ -16,7 +17,8 @@ export enum RandomizerObjectiveType {
     NumberOfGuestsInSingleQueue,
     NumberOfGuestsWithThought,
     EarnAward,
-    RemoveAllGuests
+    RemoveAllGuests,
+    KillGuests
 }
 
 export enum RandomizerObjectiveState {
@@ -112,21 +114,31 @@ export class RandomizerObjectiveGrid {
 }
 
 export class RandomizerObjective {
-    public readonly goalType: RandomizerObjectiveType;
-    public readonly description: string;
-    public readonly title: string;
-    public readonly pos_x: number;
-    public readonly pos_y: number;
+    public readonly goalType: RandomizerObjectiveType
+    public readonly description: string
+    public readonly title: string
+    public readonly pos_x: number
+    public readonly pos_y: number
 
-    public state: RandomizerObjectiveState;
+    public state: RandomizerObjectiveState
+    public coasterType?: string
+    public stat?: number
+    public targetValue?: number
+    public thought?: string
+    public scenario?: Scenario
+    public scenarioObjective?: ScenarioObjectiveType
+    public parkFlags?: ParkFlags
+    public award?: string
 
     public constructor(x: number, y: number) {
-        this.pos_x = x;
-        this.pos_y = y;
-        this.state = RandomizerObjectiveState.Incomplete;
-        this.goalType = randomEnum(RandomizerObjectiveType);
-        this.title = "Objective"
-        this.description = "Objective"
+        this.pos_x = x
+        this.pos_y = y
+        this.state = RandomizerObjectiveState.Incomplete
+        this.goalType = randomEnum(RandomizerObjectiveType)
+        this.chooseRandomValues()
+        var goalTypeString: string = RandomizerObjectiveType[this.goalType]
+        this.title = ObjectiveInfo[goalTypeString].title
+        this.description = ObjectiveInfo[goalTypeString].description
     }
 
     updateObjectiveState(): void {
@@ -171,6 +183,83 @@ export class RandomizerObjective {
                 break;
             }
             case RandomizerObjectiveType.RemoveAllGuests: {
+                break;
+            }
+            case RandomizerObjectiveType.KillGuests: {
+                break;
+            }
+        }
+    }
+
+    private chooseRandomValues(): void {
+        switch (this.goalType) {
+            case RandomizerObjectiveType.RollerCoasterTypeWithStat: {
+                this.coasterType = ""
+                this.stat = 0
+                this.targetValue = 0
+                break
+            }
+            case RandomizerObjectiveType.RollerCoasterTypeWithLenth: {
+                this.coasterType = ""
+                this.targetValue = 0
+                break
+            }
+            case RandomizerObjectiveType.ScenarioStandard: {
+                // this.scenario = something
+                this.targetValue = 0
+                break
+            }
+            case RandomizerObjectiveType.ScenarioWithDifferentObjective: {
+                // this.scenario = something
+                this.scenarioObjective = "none"
+                break
+            }
+            case RandomizerObjectiveType.ScenarioWithHarderGuestGeneration: {
+                // this.scenario = something
+                this.parkFlags = "difficultGuestGeneration" // TODO add flags, don't overwrite
+                break;
+            }
+            case RandomizerObjectiveType.ScenarioWithSceneryRemovalOff: {
+                // this.scenario = something
+                this.parkFlags = "forbidTreeRemoval"
+                break;
+            }
+            case RandomizerObjectiveType.ScenarioWithLandChangesOff: {
+                // this.scenario = something
+                this.parkFlags = "forbidLandscapeChanges"
+                break;
+            }
+            case RandomizerObjectiveType.ScenarioWithNoAdvertising: {
+                // this.scenario = something
+                this.parkFlags = "forbidMarketingCampaigns"
+                break;
+            }
+            case RandomizerObjectiveType.BuyAllLandAndConstructionRights: {
+                // this.scenario = something
+                break;
+            }
+            case RandomizerObjectiveType.NumberOfGuestsOnSingleRide: {
+                this.targetValue = 0
+                break;
+            }
+            case RandomizerObjectiveType.NumberOfGuestsInSingleQueue: {
+                this.targetValue = 0
+                break;
+            }
+            case RandomizerObjectiveType.NumberOfGuestsWithThought: {
+                this.targetValue = 0
+                break;
+            }
+            case RandomizerObjectiveType.EarnAward: {
+                this.award = "something" // Award not in API, need to listen to event?
+                break;
+            }
+            case RandomizerObjectiveType.RemoveAllGuests: {
+                this.targetValue = 0
+                break;
+            }
+            case RandomizerObjectiveType.KillGuests: {
+                this.targetValue = 0
                 break;
             }
         }

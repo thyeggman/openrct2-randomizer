@@ -10,10 +10,9 @@ const TITLE_HEIGHT = 15
 const SETTINGS_WINDOW_ID = 'randomizer'
 const SETTINGS_WINDOW_WIDTH = 400
 
-const GRID_WINDOW_ID = 'randomizer'
+const GRID_WINDOW_ID = 'bingo_grid'
 const GRID_TILE_SIZE = 130
 const GRID_WINDOW_WIDTH = 6 * EDGE_PAD + 5 * GRID_TILE_SIZE
-
 
 function openRandomizerSettingsWindow() {
   const window = ui.getWindow(SETTINGS_WINDOW_ID);
@@ -107,10 +106,6 @@ function openObjectiveGridWindow(grid: RandomizerObjectiveGrid): void {
         text: grid.board[i][j].title
       }
       widgets.push(objectiveBox);
-
-      // Label for game + scneario name
-      // Label for description
-      // Picture
     }
   }
 
