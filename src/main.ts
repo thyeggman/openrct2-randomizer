@@ -2,15 +2,21 @@
 
 import { RandomizerObjectiveGrid, GridCompletionType } from "./objectiveGrid"
 
-const WINDOW_ID = 'randomizer'
 const EDGE_PAD = 5
-const SETTINGS_WINDOW_WIDTH = 400
 const LINE_HEIGHT = 18
 const BUTTON_HEIGHT = LINE_HEIGHT - 4
 const TITLE_HEIGHT = 15
 
+const SETTINGS_WINDOW_ID = 'randomizer'
+const SETTINGS_WINDOW_WIDTH = 400
+
+const GRID_WINDOW_ID = 'randomizer'
+const GRID_TILE_SIZE = 130
+const GRID_WINDOW_WIDTH = 6 * EDGE_PAD + 5 * GRID_TILE_SIZE
+
+
 function openRandomizerSettingsWindow() {
-  const window = ui.getWindow(WINDOW_ID);
+  const window = ui.getWindow(SETTINGS_WINDOW_ID);
   if (window) {
     window.bringToFront();
     return;
@@ -63,6 +69,7 @@ function openRandomizerSettingsWindow() {
         }
       }
       var grid = new RandomizerObjectiveGrid(completionType)
+      ui.getWindow(SETTINGS_WINDOW_ID).close()
       openObjectiveGridWindow(grid);
     }
   }
@@ -70,7 +77,7 @@ function openRandomizerSettingsWindow() {
   widgets.push(generateButton);
 
   const windowDesc: WindowDesc = {
-    classification: WINDOW_ID,
+    classification: SETTINGS_WINDOW_ID,
     title: "OpenRCT2 Randomizer",
     width: SETTINGS_WINDOW_WIDTH,
     height: widgets.length * LINE_HEIGHT + (2 * EDGE_PAD) + TITLE_HEIGHT,
@@ -80,8 +87,42 @@ function openRandomizerSettingsWindow() {
   ui.openWindow(windowDesc);
 }
 
-function openObjectiveGridWindow(grid: RandomizerObjectiveGrid): number {
-  return grid.board.length;
+function openObjectiveGridWindow(grid: RandomizerObjectiveGrid): void {
+  const window = ui.getWindow(GRID_WINDOW_ID);
+  if (window) {
+    window.bringToFront();
+    return;
+  }
+
+  var widgets: Widget[] = []
+
+  for (let i = 0; i < grid.board.length; i++) {
+    for (let j = 0; j < grid.board[i].length; j++) {
+      const objectiveBox: GroupBoxWidget = {
+        type: 'groupbox',
+        x: EDGE_PAD * (j + 1) + GRID_TILE_SIZE * j,
+        y: EDGE_PAD * (i + 1) + GRID_TILE_SIZE * i + TITLE_HEIGHT,
+        width: GRID_TILE_SIZE,
+        height: GRID_TILE_SIZE,
+        text: grid.board[i][j].title
+      }
+      widgets.push(objectiveBox);
+
+      // Label for game + scneario name
+      // Label for description
+      // Picture
+    }
+  }
+
+  const windowDesc: WindowDesc = {
+    classification: GRID_WINDOW_ID,
+    title: "Bingo Board",
+    width: GRID_WINDOW_WIDTH,
+    height: GRID_WINDOW_WIDTH + TITLE_HEIGHT,
+    widgets: widgets
+  }
+
+  ui.openWindow(windowDesc);
 }
 
 function main(): void {

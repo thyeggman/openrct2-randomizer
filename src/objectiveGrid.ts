@@ -39,7 +39,7 @@ export class RandomizerObjectiveGrid {
     public readonly completionType: GridCompletionType;
 
     public state: RandomizerGridState;
-    public board: RandomizerObjective[][] = [];
+    public board: RandomizerObjective[][] = [[],[],[],[],[]]
 
     public constructor(completionType: GridCompletionType) {
         this.state = RandomizerGridState.Incomplete;
@@ -113,6 +113,8 @@ export class RandomizerObjectiveGrid {
 
 export class RandomizerObjective {
     public readonly goalType: RandomizerObjectiveType;
+    public readonly description: string;
+    public readonly title: string;
     public readonly pos_x: number;
     public readonly pos_y: number;
 
@@ -123,6 +125,8 @@ export class RandomizerObjective {
         this.pos_y = y;
         this.state = RandomizerObjectiveState.Incomplete;
         this.goalType = randomEnum(RandomizerObjectiveType);
+        this.title = "Objective"
+        this.description = "Objective"
     }
 
     updateObjectiveState(): void {
