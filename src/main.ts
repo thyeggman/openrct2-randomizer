@@ -1,5 +1,7 @@
 /// <reference path="../lib/openrct2.d.ts" />
 
+import { ObjectiveGrid, Objective } from "./objectiveGrid"
+
 const WINDOW_ID = 'randomizer'
 const EDGE_PAD = 5
 const SETTINGS_WINDOW_WIDTH = 400
