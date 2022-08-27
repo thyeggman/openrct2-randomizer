@@ -1,9 +1,8 @@
 /// <reference path="../lib/openrct2.d.ts" />
 
-import { generateKey } from "crypto";
 import { randomEnum } from "./utils"
 
-enum RandomizerObjectiveType {
+export enum RandomizerObjectiveType {
     RollerCoasterTypeWithStat,
     RollerCoasterTypeWithLenth,
     ScenarioStandard,
@@ -20,18 +19,18 @@ enum RandomizerObjectiveType {
     RemoveAllGuests
 }
 
-enum RandomizerObjectiveState {
+export enum RandomizerObjectiveState {
     Incomplete,
     Complete
 }
 
-enum GridCompletionType {
+export enum GridCompletionType {
     OneBingo,
     TwoBingos,
     Blackout
 }
 
-enum RandomizerGridState {
+export enum RandomizerGridState {
     Incomplete,
     Complete
 }

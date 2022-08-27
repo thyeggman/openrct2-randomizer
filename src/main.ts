@@ -1,6 +1,6 @@
 /// <reference path="../lib/openrct2.d.ts" />
 
-import { ObjectiveGrid, Objective } from "./objectiveGrid"
+import { RandomizerObjectiveGrid, GridCompletionType } from "./objectiveGrid"
 
 const WINDOW_ID = 'randomizer'
 const EDGE_PAD = 5
@@ -23,6 +23,19 @@ function openRandomizerSettingsWindow() {
   // Overlay grid?
   // Bingo formats
 
+  const completionTypeDropdown: DropdownWidget = {
+    type: 'dropdown',
+    x: EDGE_PAD,
+    y: nextY,
+    width: SETTINGS_WINDOW_WIDTH - (2 * EDGE_PAD),
+    height: BUTTON_HEIGHT,
+    items: Object.keys(GridCompletionType).filter((v) => isNaN(Number(v))),
+    selectedIndex: 0
+  }
+  nextY += LINE_HEIGHT
+  widgets.push(completionTypeDropdown);
+
+  // Button to generate the grid and open it
   const generateButton: ButtonWidget = {
     type: 'button',
     name: 'generateObjectives',
@@ -30,10 +43,30 @@ function openRandomizerSettingsWindow() {
     y: nextY,
     width: SETTINGS_WINDOW_WIDTH - (2 * EDGE_PAD),
     height: BUTTON_HEIGHT,
-    text: "Generate Grid"
+    text: "Generate Grid",
+    onClick: (): void => {
+      var completionType = GridCompletionType.OneBingo
+      if (completionTypeDropdown.selectedIndex != undefined) {
+        switch (completionTypeDropdown.selectedIndex) {
+          case GridCompletionType.OneBingo.valueOf(): {
+            completionType = GridCompletionType.OneBingo
+            break;
+          }
+          case GridCompletionType.TwoBingos.valueOf(): {
+            completionType = GridCompletionType.TwoBingos
+            break;
+          }
+          case GridCompletionType.OneBingo.valueOf(): {
+            completionType = GridCompletionType.Blackout
+            break;
+          }
+        }
+      }
+      var grid = new RandomizerObjectiveGrid(completionType)
+      openObjectiveGridWindow(grid);
+    }
   }
   nextY += LINE_HEIGHT
-
   widgets.push(generateButton);
 
   const windowDesc: WindowDesc = {
@@ -45,6 +78,10 @@ function openRandomizerSettingsWindow() {
   }
 
   ui.openWindow(windowDesc);
+}
+
+function openObjectiveGridWindow(grid: RandomizerObjectiveGrid): number {
+  return grid.board.length;
 }
 
 function main(): void {
