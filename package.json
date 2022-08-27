@@ -15,7 +15,6 @@
     "test:watch": "gulp testWatch",
     "lint": "gulp lint",
     "lint:fix": "gulp lintFix",
-    "init": "gulp init",
     "help": "gulp --tasks",
     "husky:prepare": "husky install"
   },

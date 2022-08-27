@@ -7,5 +7,5 @@ registerPlugin({
   authors: [config.getString('MOD_AUTHOR')],
   type: 'local',
   licence: 'MIT',
-  main,
+  main: main
 });
