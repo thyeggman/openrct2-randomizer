@@ -51,6 +51,8 @@ export class RandomizerObjectiveGrid {
                 this.board[i][j] = new RandomizerObjective(i, j);
             }
         }
+        park.postMessage(`${JSON.stringify(this.board)}`)
+        context.sharedStorage.set("OpenRCT2Randomizer.board", JSON.stringify(this.board))
     }
 
     updateBoardState(): void {
@@ -85,6 +87,7 @@ export class RandomizerObjectiveGrid {
                 break;
             }
         }
+        context.sharedStorage.set("OpenRCT2Randomizer.board", JSON.stringify(this.board))
     }
 
     countBingos(): number {
@@ -110,6 +113,13 @@ export class RandomizerObjectiveGrid {
         if (diagonal2Finished) count++;
 
         return count;
+    }
+
+    static fromJSON(serialized: unknown): RandomizerObjectiveGrid {
+        if (serialized !instanceof String) {
+            throw new 
+        }
+        return Object.assign(new RandomizerObjectiveGrid(), o)
     }
 }
 

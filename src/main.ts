@@ -48,7 +48,7 @@ function openRandomizerSettingsWindow() {
     y: nextY,
     width: SETTINGS_WINDOW_WIDTH - (2 * EDGE_PAD),
     height: BUTTON_HEIGHT,
-    text: "Generate Grid",
+    text: "Reset and Regenerate Grid",
     onClick: (): void => {
       var completionType = GridCompletionType.OneBingo
       if (completionTypeDropdown.selectedIndex != undefined) {
@@ -122,8 +122,19 @@ function openObjectiveGridWindow(grid: RandomizerObjectiveGrid): void {
 
 function main(): void {
   // Add a menu item under the map icon on the top toolbar
-  ui.registerMenuItem("Open Randomizer", function () {
+  ui.registerMenuItem("Open Randomizer Settings", function () {
     openRandomizerSettingsWindow();
+  });
+  ui.registerMenuItem("Open Randomizer Grid", function () {
+    var savedGrid = context.sharedStorage.get("OpenRCT2Randomizer.boardState")
+    if (savedGrid == undefined) {
+      ui.showError("Cannot open randomizer grid", "Grid has not been generated yet")
+    }
+    else {
+      // Deserialize grid
+      var grid = RandomizerObjectiveGrid.fromJSON(savedGrid)
+      openObjectiveGridWindow(grid)
+    }
   });
 };
 
